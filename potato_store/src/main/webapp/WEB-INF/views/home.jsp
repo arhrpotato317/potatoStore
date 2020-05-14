@@ -84,7 +84,7 @@
 					<th>사원번호</th>
 					<th>MGR</th>
 					<th>직무</th>
-					<th>부서번호</th>
+					<th>부서명</th>
 					<th>급여</th>
 				</tr>
 			</thead>

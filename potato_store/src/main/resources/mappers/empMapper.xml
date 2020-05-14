@@ -5,8 +5,15 @@
   
 <mapper namespace="emp">
 	<select id="getEmpList" resultType="hashmap">
-		SELECT ENAME, DECODE(COMM, NULL, 0, COMM) AS COMM, TO_CHAR(HIREDATE, 'YYYY/MM/DD') AS HIREDATE, EMPNO
-			, DECODE(MGR, NULL, 0, MGR) AS MGR, JOB, DEPTNO, SAL
+		SELECT 
+			ENAME
+			, DECODE(COMM, NULL, 0, COMM) AS COMM
+			, TO_CHAR(HIREDATE, 'YYYY/MM/DD') AS HIREDATE
+			, EMPNO
+			, DECODE(MGR, NULL, 0, MGR) AS MGR
+			, JOB
+			, DECODE(DEPTNO, 10, '재무부', 20, '연구부', 30, '판매부', 40, '집행부') AS DEPTNO
+			, SAL
 		FROM EXAM_MANAGER.EMP
 	</select>
 </mapper>
