@@ -1,0 +1,270 @@
+@charset "UTF-8";
+
+/* 구글폰트 */
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap');
+
+html, body {
+	font-family: 'Noto Sans KR', sans-serif;
+	color: #333;
+	word-break: keep-all;
+}
+
+body {
+	overflow-x: hidden;
+	position: relative;
+	margin: 0;
+}
+
+html {
+	font-size: 100%;
+}
+
+@media screen and (max-width: 768px) {
+	html {
+		font-size: 87.5%;
+	}
+}
+
+button, textarea, input, select {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.0rem;
+	color: inherit;
+	padding: 0;
+}
+
+form {
+	margin: 0;
+}
+
+button {
+	border: 0;
+	border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: inherit;
+    font-weight: 700;
+    color: inherit;
+	margin: 0;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+p, ul, figure {
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+img {
+	image-rendering: -moz-pixelated;         /* Firefox */
+	image-rendering:   -o-pixelated;         /* Opera */
+	image-rendering: pixelated;
+	max-width: 100%;
+}
+
+.container {
+	width: 800px;
+	margin: 0 auto;
+}
+
+.container-full {
+	width: 100%;
+	position: relative;
+}
+
+@media (max-width: 800px) {
+	.container {
+		width: 100%;
+	}
+}
+
+.img_box {
+	line-height: 0;
+}
+
+/********** header **********/
+#header {
+	border-bottom: 1px solid #ccc;
+}
+
+.inner_header {
+	height: 70px;
+	width: 800px;
+	margin: 0 auto;
+	position: relative;
+}
+
+.inner_header h1 {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform: translateY(-50%);
+}
+
+.inner_header .menu {
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translateY(-50%);
+}
+
+/********** home **********/
+.home_list {
+	margin: 50px -10px 0;
+}
+
+.home_list::after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+.home_list .inner_list {
+	float: left;
+	width: calc(50% - 20px);
+	margin: 0 10px;
+	padding: 20px 0 30px;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	text-align: center;
+}
+
+.home_list .inner_list .btn_wrap {
+	margin-top: 30px;
+}
+
+.home_list .inner_list .btn_wrap button {
+	width: 100px;
+	padding: 5px 0;
+	margin: 0 5px;
+	border: 1px solid #ccc;
+	background: #fff;
+	cursor: pointer;
+}
+
+/********** popup **********/
+.pop_back {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.7);
+	display: none;
+}
+
+.popup {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 800px;
+	min-height: 500px;
+	background: #fff;
+	padding: 20px;
+	box-sizing: border-box;
+	display: none;
+}
+
+.popup .pop_close {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	border: 1px solid #ddd;
+	background: #fff;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+.popup h3 {
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+table td, table th {
+	border: 1px solid #ddd;
+	padding: 7px;
+	font-size: 1rem;
+	font-weight: 400;
+}
+
+table th {
+	text-align: left;
+	background-color: #828282;
+	color: white;
+}
+
+table tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

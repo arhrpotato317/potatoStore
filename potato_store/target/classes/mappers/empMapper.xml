@@ -4,5 +4,9 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="emp">
-
+	<select id="getEmpList" resultType="hashmap">
+		SELECT ENAME, DECODE(COMM, NULL, 0, COMM) AS COMM, TO_CHAR(HIREDATE, 'YYYY/MM/DD') AS HIREDATE, EMPNO
+			, DECODE(MGR, NULL, 0, MGR) AS MGR, JOB, DEPTNO, SAL
+		FROM EXAM_MANAGER.EMP
+	</select>
 </mapper>
