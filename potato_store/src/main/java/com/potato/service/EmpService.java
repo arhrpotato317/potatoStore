@@ -5,6 +5,7 @@ import java.util.Map;
 
 public interface EmpService {
 	
-	// 사원 목록 가져오기
+	// 사원명부 리스트
 	public List<Map<String, Object>> getEmpList() throws Exception;
+	public List<Map<String, Object>> getEmpList(Map<String, Object> map) throws Exception;
 }

@@ -14,10 +14,15 @@ public class EmpServiceImpl implements EmpService {
 	@Autowired
 	private EmpDAO dao;
 	
-	// 사원 목록 가져오기
+	// 사원명부 리스트
 	@Override
 	public List<Map<String, Object>> getEmpList() throws Exception {
 		return dao.getEmpList();
+	}
+
+	@Override
+	public List<Map<String, Object>> getEmpList(Map<String, Object> map) throws Exception {
+		return dao.getEmpList(map);
 	}
 
 }

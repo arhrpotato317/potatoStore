@@ -13,10 +13,15 @@ public class EmpDAOImpl implements EmpDAO {
 	@Autowired
 	private SqlSession sql;
 	
-	// 사원 목록 가져오기
+	// 사원명부 리스트
 	@Override
 	public List<Map<String, Object>> getEmpList() throws Exception {
 		return sql.selectList("emp.getEmpList");
+	}
+
+	@Override
+	public List<Map<String, Object>> getEmpList(Map<String, Object> map) throws Exception {
+		return sql.selectList("emp.getEmpList", map);
 	}
 
 }
