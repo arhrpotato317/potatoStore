@@ -30,6 +30,12 @@ button, textarea, input, select {
     font-size: 1.0rem;
 	color: inherit;
 	padding: 0;
+	background: none;
+	border: 1px solid #ddd;
+}
+
+button {
+	cursor: pointer;
 }
 
 form {
@@ -147,6 +153,33 @@ img {
 	transform: translateY(-50%);
 }
 
+/********** login **********/
+.login_form .input_box {
+	margin-bottom: 10px;
+}
+
+.login_form .input_box label {
+	width: 70px;
+	display: inline-block;
+}
+
+.login_form .input_box input {
+	width: calc(100% - 80px);
+	display: inline-block;
+}
+
+.login_form .btn_wrap {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.login_form .btn_wrap button {
+	width: 100px;
+	padding: 7px;
+	background: #333;
+	color: #fff;
+}
+
 /********** home **********/
 .home_list {
 	margin: 50px -10px 0;
@@ -205,6 +238,12 @@ img {
 	border-radius: 15px;
 	box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.1);
 	display: none;
+	z-index: 9;
+}
+
+.popup.login {
+	width: 350px;
+	min-height: 250px;
 }
 
 .popup .pop_close {
@@ -239,6 +278,10 @@ table tr:nth-child(even) {
 	background-color: #f2f2f2;
 }
 
+#loginMsg {
+	color: #e20000;
+}
+
 /********** form **********/
 .emp_form {
 	margin-bottom: 15px;
@@ -258,7 +301,7 @@ table tr:nth-child(even) {
 }
 
 .emp_form .input_box label {
-	width: 80px;
+	width: 70px;
 	display: inline-block;
 }
 

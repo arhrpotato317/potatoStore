@@ -12,6 +12,7 @@
 			// 팝업 열기
 			document.querySelector('.pop_back').style.display = 'block';
 			document.querySelector('.popup.allEmp').style.display = 'block';
+			document.getElementById("allEmpBody").innerHTML = "";
 			
 			ajax.onreadystatechange = allEmpAjax;
 			ajax.open("POST", "./allEmpAjax", true);
@@ -164,11 +165,11 @@
 		
 		<form class="emp_form">
 			<div class="input_box">
-				<label for="empNo">사원 번호 : </label>
+				<label for="empNo">사원 번호</label>
 				<input type="text" id="empNo" name="empNo">
 			</div>
 			<div class="input_box">
-				<label for="empDeptNo">부서 이름 : </label>
+				<label for="empDeptNo">부서 이름</label>
 				<select id="empDeptNo" name="empDeptNo">
 					<option>--- 선택 ---</option>
 					<option value="10">재무부</option>
