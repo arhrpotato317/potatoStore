@@ -153,6 +153,16 @@ img {
 	transform: translateY(-50%);
 }
 
+.inner_header .menu li {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 10px;
+}
+
+.inner_header .menu .info span {
+	color: #00c3ba;
+}
+
 /********** login **********/
 .login_form .input_box {
 	margin-bottom: 10px;

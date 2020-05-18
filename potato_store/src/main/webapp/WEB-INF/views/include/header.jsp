@@ -59,7 +59,13 @@
 		<div class="inner_header">
 			<h1><a href="${pageContext.request.contextPath}">LOGO</a></h1>
 			<ul class="menu">
-				<li><button type="button" onclick="loginPop();">로그인</button></li>
+				<c:if test="${login == null}">
+					<li><button type="button" onclick="loginPop();">로그인</button></li>
+				</c:if>
+				<c:if test="${login != null}">
+					<li class="info"><span>${login.ID}</span>님</li>
+					<li><button type="button" onclick="location.href='./logout'">로그아웃</button></li>
+				</c:if>
 			</ul>
 		</div>
 	</header>

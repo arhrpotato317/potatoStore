@@ -25,6 +25,14 @@
 	<context:component-scan base-package="com.potato.dao" />
 	<context:component-scan base-package="com.potato.service" />
 	
+	<!-- 인터셉터 -->
+	<beans:bean id="LoginInterceptor" class="com.potato.interceptor.LoginInterceptor" />
 	
+	<interceptors>
+		<interceptor>
+			<mapping path="" />
+			<beans:ref bean="LoginInterceptor" />
+		</interceptor>
+	</interceptors>
 	
 </beans:beans>

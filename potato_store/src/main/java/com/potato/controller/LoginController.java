@@ -3,6 +3,8 @@ package com.potato.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +30,13 @@ public class LoginController {
 	// 로그인 처리 Ajax
 	@RequestMapping(value = "/loginAjax", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject loginAjax(@RequestBody String ajaxRtn) throws Exception {
+	public JSONObject loginAjax(@RequestBody String ajaxRtn, HttpSession session) throws Exception {
 		logger.info("loginAjax");
+		
+		// 기존 세션값 제거
+		if(session.getAttribute("login") != null) {
+			session.removeAttribute("login");
+		}
 		
 		JSONParser jsonParser = new JSONParser();
 		JSONObject ajaxCode = (JSONObject) jsonParser.parse(ajaxRtn);
@@ -49,9 +56,19 @@ public class LoginController {
 			loginCheckRtn.put("msg", "로그인에 실패하셨습니다.");
 		} else {
 			loginCheckRtn.put("loginCheck", loginCheck);
+			// 인터셉터 설정 - 세션에 'login'이름으로 객체를 저장
+			session.setAttribute("login", loginCheck);
 		}
 		
 		return loginCheckRtn;
+	}
+	
+	// 로그아웃
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(HttpSession session) throws Exception {
+		logger.info("logout");
+		service.logout(session);
+		return "redirect:/";
 	}
 	
 }
