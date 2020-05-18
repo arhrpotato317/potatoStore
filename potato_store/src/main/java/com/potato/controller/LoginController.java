@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.potato.service.LoginService;
@@ -69,6 +70,15 @@ public class LoginController {
 		logger.info("logout");
 		service.logout(session);
 		return "redirect:/";
+	}
+	
+	// 회원가입 아이디 중복체크 Ajax
+	@RequestMapping(value = "/idChkAjax", method = RequestMethod.POST)
+	@ResponseBody
+	public int idChkAjax(@RequestParam("insertId") String insertId) throws Exception {
+		logger.info("idChkAjax");
+		int idChkCnt = service.getIdChk(insertId);
+		return idChkCnt;
 	}
 	
 }

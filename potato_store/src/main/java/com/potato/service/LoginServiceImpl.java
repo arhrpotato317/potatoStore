@@ -25,4 +25,10 @@ public class LoginServiceImpl implements LoginService {
 	public void logout(HttpSession session) throws Exception {
 		session.invalidate();
 	}
+	
+	// 회원가입 아이디 중복체크
+	@Override
+	public int getIdChk(String insertId) throws Exception {
+		return dao.getIdChk(insertId);
+	}
 }

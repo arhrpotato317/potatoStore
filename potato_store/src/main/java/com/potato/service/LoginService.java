@@ -10,4 +10,7 @@ public interface LoginService {
 	public Map<String, Object> getLogin(Map<String, Object> map) throws Exception;
 	// 로그아웃
 	public void logout(HttpSession session) throws Exception;
+	
+	// 회원가입 아이디 중복체크
+	public int getIdChk(String insertId) throws Exception;
 }

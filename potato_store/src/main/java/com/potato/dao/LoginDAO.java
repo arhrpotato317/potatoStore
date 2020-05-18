@@ -6,4 +6,7 @@ public interface LoginDAO {
 	
 	// 로그인
 	public Map<String, Object> getLogin(Map<String, Object> map) throws Exception;
+	
+	// 회원가입 아이디 중복체크
+	public int getIdChk(String insertId) throws Exception;
 }

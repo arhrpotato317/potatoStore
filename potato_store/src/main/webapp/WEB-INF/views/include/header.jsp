@@ -11,6 +11,8 @@
 		function loginPop() {
 			document.querySelector('.pop_back').style.display = 'block';
 			document.querySelector('.popup.login').style.display = 'block';
+			document.getElementById("userId").value = "";
+			document.getElementById("userPass").value = "";
 		}
 		
 		// 로그인 처리 Ajax
@@ -50,6 +52,50 @@
 				}
 			}
 		}
+		
+		function joinPop() {
+			document.querySelector('.popup.login').style.display = 'none';
+			document.querySelector('.popup.join').style.display = 'block';
+			document.getElementById("insertId").value = "";
+			document.getElementById("insertPass").value = "";
+			document.getElementById("insertPassChk").value = "";
+			document.getElementById("insertName").value = "";
+		}
+		// 아이디 중복체크
+		function idOverChk() {
+			var insertId = document.getElementById("insertId").value;
+			if(insertId == '') {
+				alert("아이디를 입력해주세요.");
+				return false;
+			}
+			
+			ajax.onreadystatechange = idChkAjax;
+			ajax.open("POST", "./idChkAjax", true);
+			ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			ajax.send('insertId='+encodeURIComponent(insertId));
+		}
+		function idChkAjax() {
+			if(ajax.readyState === XMLHttpRequest.DONE) {
+				if(ajax.status === 200) {
+					var response = parseInt(ajax.responseText);
+					if(response > 0) {
+						alert("사용하실 수 없는 아이디입니다.");
+						document.getElementById("insertId").value = "";
+					} else {
+						alert("사용하실 수 있는 아이디입니다.");
+					}
+				} else {
+					alert("실패");
+				}
+			}
+		}
+		
+		// 팝업 닫기
+		function popClose(obj) {
+			document.querySelector('.pop_back').style.display = 'none';
+			var closePop = obj.closest('.popup');
+			closePop.style.display = 'none';
+		}
 	</script>
 </head>
 <body>
@@ -70,6 +116,9 @@
 		</div>
 	</header>
 	
+	<!-- 팝업 배경 -->
+	<div class="pop_back"></div>
+	
 	<!-- 로그인 팝업 -->
 	<div class="popup login">
 		<h3>로그인</h3>
@@ -88,6 +137,36 @@
 			
 			<div class="btn_wrap">
 				<button type="button" onclick="login();">로그인</button>
+				<button type="button" onclick="joinPop();">회원가입</button>
+			</div>
+		</form>
+	</div>
+	
+	<!-- 회원가입 팝업 -->
+	<div class="popup join">
+		<h3>회원가입</h3>
+		<button type="button" class="pop_close" onclick="popClose(this);">닫기</button>
+		
+		<form class="login_form">
+			<div class="input_box over_check">
+				<label for="insertId">아이디</label>
+				<input type="text" id="insertId" name="insertId">
+				<button type="button" onclick="idOverChk();">중복체크</button>
+			</div>
+			<p id="loginMsg">비밀번호는 5자리 이상 10자리 이하여야 합니다.</p>
+			<div class="input_box">
+				<label for="insertPass">비밀번호</label>
+				<input type="password" id="insertPass" name="insertPass">
+			</div>
+			<div class="input_box">
+				<label for="insertPassChk">비밀번호 확인</label>
+				<input type="password" id="insertPassChk" name="insertPassChk">
+			</div>
+			<div class="input_box">
+				<label for="insertName">성명</label>
+				<input type="text" id="insertName" name="insertName">
+			</div>
+			<div class="btn_wrap">
 				<button type="button">회원가입</button>
 			</div>
 		</form>

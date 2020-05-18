@@ -169,12 +169,12 @@ img {
 }
 
 .login_form .input_box label {
-	width: 70px;
+	width: 100px;
 	display: inline-block;
 }
 
 .login_form .input_box input {
-	width: calc(100% - 80px);
+	width: calc(100% - 110px);
 	display: inline-block;
 }
 
@@ -188,6 +188,16 @@ img {
 	padding: 7px;
 	background: #333;
 	color: #fff;
+}
+
+.login_form .over_check button {
+	width: 80px;
+	background: #ccc;
+	padding: 1px 0;
+}
+
+.login_form .over_check input {
+	width: calc(100% - 190px);
 }
 
 /********** home **********/
@@ -251,9 +261,10 @@ img {
 	z-index: 9;
 }
 
-.popup.login {
-	width: 350px;
-	min-height: 250px;
+.popup.login,
+.popup.join {
+	width: 380px;
+	min-height: 230px;
 }
 
 .popup .pop_close {
@@ -329,10 +340,21 @@ table tr:nth-child(even) {
 	color: #fff;
 }
 
+/********** product **********/
+.product_wrap {
+	margin-top: 50px;
+}
 
+.product_wrap h1 {
+	text-align: center;
+}
 
-
-
+.product_wrap .inner {
+	margin-top: 35px;
+	border-radius: 15px;
+	box-shadow: 0px 0px 14px 1px rgba(0, 0, 0, 0.07);
+	padding: 15px;
+}
 
 
 

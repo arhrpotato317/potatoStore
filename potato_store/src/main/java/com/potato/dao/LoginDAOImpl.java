@@ -18,4 +18,10 @@ public class LoginDAOImpl implements LoginDAO {
 		return sql.selectOne("login.getLogin", map);
 	}
 
+	// 회원가입 아이디 중복체크
+	@Override
+	public int getIdChk(String insertId) throws Exception {
+		return sql.selectOne("login.getIdChk", insertId);
+	}
+
 }

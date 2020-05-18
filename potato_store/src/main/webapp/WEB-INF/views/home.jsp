@@ -102,13 +102,6 @@
 				}
 			}
 		}
-		
-		// 팝업 닫기
-		function popClose(obj) {
-			document.querySelector('.pop_back').style.display = 'none';
-			var closePop = obj.closest('.popup');
-			closePop.style.display = 'none';
-		}
 	</script>
 </head>
 <body>
@@ -127,15 +120,12 @@
 			<div class="inner_list">
 				<h2>상품 관리</h2>
 				<div class="btn_wrap">
-					<button type="button">상품 입고</button>
+					<button type="button" onclick="location.href='./initem'">상품 입고</button>
 					<button type="button">상품 출고</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	<!-- 팝업 배경 -->
-	<div class="pop_back"></div>
 	
 	<!-- 사원명부 전체 리스트 팝업 -->
 	<div class="popup allEmp">
