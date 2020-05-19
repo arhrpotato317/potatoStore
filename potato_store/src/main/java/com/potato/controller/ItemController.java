@@ -2,27 +2,20 @@ package com.potato.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.potato.service.LoginService;
-
 @Controller
-public class InitemController {
+@RequestMapping("/item/*")
+public class ItemController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(InitemController.class);
-	
-	@Autowired
-	LoginService service;
+	private static final Logger logger = LoggerFactory.getLogger(ItemController.class);
 
 	// 상품 입고
 	@RequestMapping(value = "/initem", method = RequestMethod.GET)
-	public String initem() throws Exception {
-		logger.info("initem");
-		
-		return "product/initem";
+	public void itemInitem() throws Exception {
+		logger.info("item initem");
 	}
 }
 

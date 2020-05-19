@@ -1,5 +1,7 @@
 package com.potato.interceptor;
 
+import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,10 +18,20 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		// 로그인 처리를 담당하는 사용자 정보를 담는 객체
 		Object obj = session.getAttribute("login");
 		
-		if(obj == null) {
-			// 로그인이 되지 않은 상태
-			response.sendRedirect("/");
-			return false; // 컨트롤러 요청으로 가지 않도록 처리
+		String requestUri = request.getRequestURI();
+		String[] requestUris = requestUri.split("/");
+		String firstPath = requestUris[2];
+		
+		if(firstPath.equals("item")) {
+			if(obj == null) {
+				// 로그인 X
+				response.setContentType("text/html; charset=UTF-8");
+	            PrintWriter out = response.getWriter();
+	            out.println("<script>alert('로그인 후 이용가능합니다.');history.go(-1);</script>");
+	            out.flush();
+	            /*response.sendRedirect(request.getContextPath() + "/");*/
+	            return false;
+			}
 		}
 		
 		return true; // 컨트롤러 URI
