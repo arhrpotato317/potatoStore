@@ -83,6 +83,7 @@
 						document.getElementById("insertId").value = "";
 					} else {
 						alert("사용하실 수 있는 아이디입니다.");
+						document.getElementById("insertIdChk").value = "checked";
 					}
 				} else {
 					alert("실패");
@@ -95,6 +96,64 @@
 			document.querySelector('.pop_back').style.display = 'none';
 			var closePop = obj.closest('.popup');
 			closePop.style.display = 'none';
+		}
+		
+		// 회원가입
+		function submitJoin() {
+			var insertId = document.getElementById("insertId").value;
+			var insertIdChk = document.getElementById("insertIdChk").value; // 중복체크 확인
+			var insertPass = document.getElementById("insertPass").value;
+			var insertPassChk = document.getElementById("insertPassChk").value;
+			var insertName = document.getElementById("insertName").value;
+			
+			if(insertId == '' || insertPass == '' || insertPassChk == '' || insertName == '') {
+				alert("입력사항을 모두 입력해주세요.");
+				return false;
+			}
+			
+			if(insertIdChk == "uncheck") {
+				alert("아이디 중복체크를 확인해주세요.");
+				return false;
+			}
+			
+			if(insertPass.length<5 || insertPass.length>10) {
+				alert("비밀번호는 5자리 이상 10자리 이하여야 합니다.");
+				return false;
+			}
+			
+			if(insertPass != insertPassChk) {
+				alert("비밀번호가 불일치합니다.");
+				return false;
+			}
+			
+			var data = {
+				"insertId": insertId,
+				"insertPassChk": insertPassChk,
+				"insertName": insertName
+			}
+			
+			ajax.onreadystatechange = submitJoinAjax;
+			ajax.open("POST", "./submitJoinAjax", true);
+			ajax.setRequestHeader('Content-Type', 'application/json');
+			ajax.send(JSON.stringify(data));
+		}
+		function submitJoinAjax() {
+			if(ajax.readyState === XMLHttpRequest.DONE) {
+				if(ajax.status === 200) {
+					var response = JSON.parse(ajax.responseText);
+					if(response.msg == "success") {
+						alert("회원가입이 완료되었습니다.");
+						location.reload();
+					}
+				} else {
+					alert("실패");
+				}
+			}
+		}
+		
+		// 중복체크 확인 후 아이디 변경 감지
+		function changeId() {
+			document.getElementById("insertIdChk").value = "uncheck";
 		}
 	</script>
 </head>
@@ -150,7 +209,8 @@
 		<form class="login_form">
 			<div class="input_box over_check">
 				<label for="insertId">아이디</label>
-				<input type="text" id="insertId" name="insertId">
+				<input type="text" id="insertId" name="insertId" onchange="changeId();">
+				<input type="hidden" id="insertIdChk" name="insertIdChk" value="uncheck">
 				<button type="button" onclick="idOverChk();">중복체크</button>
 			</div>
 			<p id="loginMsg">비밀번호는 5자리 이상 10자리 이하여야 합니다.</p>
@@ -167,7 +227,7 @@
 				<input type="text" id="insertName" name="insertName">
 			</div>
 			<div class="btn_wrap">
-				<button type="button">회원가입</button>
+				<button type="button" onclick="submitJoin();">회원가입</button>
 			</div>
 		</form>
 	</div>

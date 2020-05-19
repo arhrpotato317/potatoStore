@@ -24,4 +24,10 @@ public class LoginDAOImpl implements LoginDAO {
 		return sql.selectOne("login.getIdChk", insertId);
 	}
 
+	// 회원가입
+	@Override
+	public void insertJoin(Map<String, Object> map) throws Exception {
+		sql.insert("login.insertJoin", map);
+	}
+
 }

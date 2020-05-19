@@ -81,6 +81,31 @@ public class LoginController {
 		return idChkCnt;
 	}
 	
+	// 회원가입 처리 Ajax
+	@RequestMapping(value = "/submitJoinAjax", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject submitJoinAjax(@RequestBody String ajaxRtn) throws Exception {
+		logger.info("submitJoinAjax");
+
+		JSONParser jsonParser = new JSONParser();
+		JSONObject ajaxCode = (JSONObject) jsonParser.parse(ajaxRtn);
+		String insertId = (String) ajaxCode.get("insertId");
+		String insertPass = (String) ajaxCode.get("insertPassChk");
+		String insertName = (String) ajaxCode.get("insertName");
+		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("insertId", insertId);
+		paramMap.put("insertPass", insertPass);
+		paramMap.put("insertName", insertName);
+		
+		service.insertJoin(paramMap);
+
+		JSONObject joinRtn = new JSONObject();
+		joinRtn.put("msg", "success");
+
+		return joinRtn;
+	}
+	
 }
 
 

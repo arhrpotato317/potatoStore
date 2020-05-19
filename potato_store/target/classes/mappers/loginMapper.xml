@@ -24,4 +24,12 @@
 		]]>
 	</select>
 	
+	<!-- 회원가입 -->
+	<insert id="insertJoin" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO EXAM_MANAGER.USERINFO
+			(ID, PASS, NAME, INSDATE)
+			VALUES(#{insertId}, #{insertPass}, #{insertName}, SYSDATE)
+		]]>
+	</insert>
 </mapper>

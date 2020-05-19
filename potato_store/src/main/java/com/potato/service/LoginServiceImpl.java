@@ -31,4 +31,10 @@ public class LoginServiceImpl implements LoginService {
 	public int getIdChk(String insertId) throws Exception {
 		return dao.getIdChk(insertId);
 	}
+	
+	// 회원가입
+	@Override
+	public void insertJoin(Map<String, Object> map) throws Exception {
+		dao.insertJoin(map);
+	}
 }

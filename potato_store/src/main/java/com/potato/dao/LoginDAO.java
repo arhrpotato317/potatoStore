@@ -9,4 +9,7 @@ public interface LoginDAO {
 	
 	// 회원가입 아이디 중복체크
 	public int getIdChk(String insertId) throws Exception;
+	
+	// 회원가입
+	public void insertJoin(Map<String, Object> map) throws Exception;
 }
