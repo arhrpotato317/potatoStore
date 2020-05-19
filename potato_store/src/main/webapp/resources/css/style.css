@@ -15,6 +15,20 @@ body {
 	margin: 0;
 }
 
+body::after {
+	content: '';
+	display: block;
+	width: 370px;
+	height: 370px;
+	background: url('../images/image01.png') no-repeat;
+	background-size: 100%;
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	opacity: 0.2;
+	z-index: -1;
+}
+
 html {
 	font-size: 100%;
 }
@@ -284,8 +298,8 @@ img {
 
 table td, table th {
 	border: 1px solid #ddd;
-	padding: 7px;
-	font-size: 1rem;
+	padding: 5px 7px;
+	font-size: 0.875rem;
 	font-weight: 400;
 }
 
@@ -342,19 +356,170 @@ table tr:nth-child(even) {
 
 /********** product **********/
 .product_wrap {
-	margin-top: 50px;
+	margin: 50px 0 380px;
 }
 
 .product_wrap h1 {
 	text-align: center;
 }
 
-.product_wrap .inner {
+.product_wrap h4 {
+	margin-bottom: 20px;
+}
+
+.product_wrap .inner_wrap {
 	margin-top: 35px;
 	border-radius: 15px;
 	box-shadow: 0px 0px 14px 1px rgba(0, 0, 0, 0.07);
-	padding: 15px;
+	padding: 0 30px;
+	background: #fff;
 }
+
+.product_wrap .inner_wrap .inner {
+	padding: 20px 0;
+	border-bottom: 1px solid #eee;
+}
+
+.product_wrap .inner_wrap .inner:last-child {
+	border-bottom: none;
+}
+
+.product_wrap .input_wrap::after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+.product_wrap .input_box {
+	margin-bottom: 5px;
+}
+
+.product_wrap .input_box label {
+	width: 80px;
+	display: inline-block;
+}
+
+.product_wrap .input_box input {
+	width: calc(50% - 80px);
+}
+
+.product_wrap .input_wrap .input_box {
+	float: left;
+}
+
+.product_wrap .input_wrap .input_box select {
+	width: 150px;
+}
+
+.product_wrap .input_wrap button {
+	float: left;
+	margin-left: 5px;
+	padding: 2px 10px;
+	background: #333;
+	color: #fff;
+}
+
+.product_wrap .in_table {
+	overflow-y: scroll;
+	max-height: 150px;
+	margin-top: 20px;
+}
+
+.product_wrap .btn_wrap {
+	margin-top: 20px;
+}
+
+.product_wrap .btn_wrap button {
+	width: 70px;
+	padding: 5px;
+	color: #fff;
+	margin-right: 7px;
+}
+
+.product_wrap .btn_wrap .edit {
+	background: #ff9800;
+}
+
+.product_wrap .btn_wrap .save {
+	background: #3f51b5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
