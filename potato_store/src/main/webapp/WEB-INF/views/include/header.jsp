@@ -169,7 +169,7 @@
 				</c:if>
 				<c:if test="${login != null}">
 					<li class="info"><span>${login.ID}</span>님</li>
-					<li><button type="button" onclick="location.href='./logout'">로그아웃</button></li>
+					<li><button type="button" onclick="location.href='${pageContext.request.contextPath}/logout'">로그아웃</button></li>
 				</c:if>
 			</ul>
 		</div>
