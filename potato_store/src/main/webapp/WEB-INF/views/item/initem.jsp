@@ -37,6 +37,76 @@
 				}
 			}
 		}
+		
+		// 첫번째 카테고리에 따른 두번째 카테고리 리스트 Ajax
+		function cateOneChange() {
+			var cateOne = document.getElementById("cateOne").value;
+			var data = {
+				"cateOne": cateOne
+			}
+			
+			ajax.onreadystatechange = cateOneChangeAjax;
+			ajax.open("POST", "./cateOneChangeAjax", true);
+			ajax.setRequestHeader('Content-Type', 'application/json');
+			ajax.send(JSON.stringify(data));
+		}
+		function cateOneChangeAjax() {
+			if(ajax.readyState === XMLHttpRequest.DONE) {
+				if(ajax.status === 200) {
+					var response = JSON.parse(ajax.responseText);
+					var resultHtml = "";
+					for(var i=0; i<response.cateOneChange.length; i++) {
+						resultHtml += '<option value="'+response.cateOneChange[i].CDNO+'">'+response.cateOneChange[i].CDNAME+'</option>';
+					}
+					document.getElementById("cateTwo").innerHTML = resultHtml;
+				} else {
+					alert("실패");
+				}
+			}
+		}
+		
+		// 카테고리 조회 결과 Ajax
+		function submitCate() {
+			var cateTwo = document.getElementById("cateTwo").value;
+			var data = {
+				"cateTwo": cateTwo
+			}
+			
+			ajax.onreadystatechange = submitCateAjax;
+			ajax.open("POST", "./submitCateAjax", true);
+			ajax.setRequestHeader('Content-Type', 'application/json');
+			ajax.send(JSON.stringify(data));
+		}
+		function submitCateAjax() {
+			if(ajax.readyState === XMLHttpRequest.DONE) {
+				if(ajax.status === 200) {
+					var response = JSON.parse(ajax.responseText);
+					
+					if(response.submitCate.length == 0) {
+						alert("조회된 결과가 없습니다.");
+						return false;
+					}
+					
+					var resultHtml = "";
+					for(var i=0; i<response.submitCate.length; i++) {
+						resultHtml += '<tr>\
+								<td>'+response.submitCate[i].ITEMCD+'</td>\
+								<td>'+response.submitCate[i].ITEMNAME+'</td>\
+								<td>'+response.submitCate[i].MADENMCD+'</td>\
+								<td>'+response.submitCate[i].MADENMNAME+'</td>\
+								<td>'+response.submitCate[i].ITEMUNITCD+'</td>\
+								<td>'+response.submitCate[i].ITEMUNITNAME+'</td>\
+								<td>'+response.submitCate[i].STOCKAMT+'</td>\
+								<td><input type="checkbox" '+response.submitCate[i].STOCKYN+' disabled></td>\
+								<td><input type="checkbox" '+response.submitCate[i].USEYN+' disabled></td>\
+							</tr>';
+					}
+					document.getElementById("cateItemBody").innerHTML = resultHtml;
+				} else {
+					alert("실패");
+				}
+			}
+		}
 	</script>
 </head>
 <body>
@@ -55,14 +125,17 @@
 					<div class="input_wrap">
 						<div class="input_box">
 							<label>카테고리</label>
-							<select>
+							<select id="cateOne" onchange="cateOneChange();">
 								<option>--- 선택 ---</option>
+								<c:forEach items="${cateOneList}" var="one">
+									<option value="${one.CDNO}">${one.CDNAME}</option>
+								</c:forEach>
 							</select>
-							<select>
+							<select id="cateTwo">
 								<option>--- 선택 ---</option>
 							</select>
 						</div>
-						<button type="button">조회</button>
+						<button type="button" onclick="submitCate();">조회</button>
 					</div>
 					
 					<div class="in_table">
@@ -80,6 +153,7 @@
 									<th>사용여부</th>
 								</tr>
 							</thead>
+							<tbody id="cateItemBody"></tbody>
 						</table>
 					</div>
 				</div>
@@ -99,6 +173,7 @@
 									<th>입고수량</th>
 								</tr>
 							</thead>
+							<tbody id="inItemBody"></tbody>
 						</table>
 					</div>
 				</div>

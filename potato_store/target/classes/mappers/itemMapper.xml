@@ -13,4 +13,28 @@
 		CONNECT BY PRIOR CDNO = UPCD
 	</select>
 	
+	<!-- 카테고리 리스트 -->
+	<select id="getCateOneList" parameterType="String" resultType="hashmap">
+		SELECT CDNO, CDNAME
+		FROM EXAM_MANAGER.CODEMNG
+		WHERE UPCD = #{upCode}
+	</select>
+	
+	<!-- 카테고리 조회 리스트 -->
+	<select id="getCateList" parameterType="String" resultType="hashmap">
+		SELECT 
+			ITEMCD
+			, ITEMNAME
+			, MADENMCD
+			, (SELECT CDNAME FROM EXAM_MANAGER.CODEMNG CMG WHERE ITEM.MADENMCD = CMG.CDNO) AS MADENMNAME
+			, ITEMUNITCD
+			, (SELECT CDNAME FROM EXAM_MANAGER.CODEMNG CMG WHERE ITEM.ITEMUNITCD = CMG.CDNO) AS ITEMUNITNAME
+			, STOCKAMT
+			, DECODE(STOCKYN, 'Y', 'checked') STOCKYN
+			, DECODE(USEYN, 'Y', 'checked') USEYN
+			, ITEMCLSCD
+		FROM EXAM_MANAGER.ITEMLIST ITEM
+		WHERE ITEMCLSCD = #{cateTwo}
+	</select>
+	
 </mapper>
