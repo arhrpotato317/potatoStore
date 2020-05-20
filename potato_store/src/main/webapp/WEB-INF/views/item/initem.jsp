@@ -4,6 +4,40 @@
 <html>
 <head>
 	<title>Potato Store</title>
+	<script type="text/javascript">
+		var ajax = new XMLHttpRequest();
+		
+		// 전체 상품 리스트 팝업 Ajax
+		function allItemPop() {
+			document.querySelector('.pop_back').style.display = 'block';
+			document.querySelector('.allItem').style.display = 'block';
+			document.getElementById("allItemBody").innerHTML = "";
+			
+			ajax.onreadystatechange = allItemAjax;
+			ajax.open("POST", "./allItemAjax", true);
+			ajax.send();
+		}
+		function allItemAjax() {
+			if(ajax.readyState === XMLHttpRequest.DONE) {
+				if(ajax.status === 200) {
+					var response = JSON.parse(ajax.responseText);
+					var resultHtml = "";
+					for(var i=0; i<response.allItemList.length; i++) {
+						resultHtml += '<tr>\
+								<td>'+response.allItemList[i].CDNO+'</td>\
+								<td>'+response.allItemList[i].CDLVL+'</td>\
+								<td>'+response.allItemList[i].UPCD+'</td>\
+								<td>'+response.allItemList[i].CDNAME+'</td>\
+								<td><input type="checkbox" '+response.allItemList[i].USEYN+' disabled></td>\
+							</tr>';
+					}
+					document.getElementById("allItemBody").innerHTML = resultHtml;
+				} else {
+					alert("실패");
+				}
+			}
+		}
+	</script>
 </head>
 <body>
 	<!-- header -->
@@ -12,10 +46,11 @@
 	<div class="container">
 		<div class="product_wrap">
 			<h1>상품 입고</h1>
+			<button type="button" onclick="allItemPop();" class="btn_allItem">전체 상품 확인하기</button>
 			
 			<div class="inner_wrap">
 				<div class="inner">
-					<h4>전체 상품 리스트</h4>
+					<h4>상품 조회 리스트</h4>
 					
 					<div class="input_wrap">
 						<div class="input_box">
@@ -98,6 +133,27 @@
 				</div>
 			</div>
 			
+		</div>
+	</div>
+	
+	<!-- 전체 상품 리스트 팝업 -->
+	<div class="popup allItem">
+		<h3>전체 상품 리스트</h3>
+		<button type="button" class="pop_close" onclick="popClose(this);">닫기</button>
+		
+		<div class="in_table">
+			<table>
+				<thead>
+					<tr>
+						<th>코드번호</th>
+						<th>코드레벨</th>
+						<th>상위코드</th>
+						<th>코드이름</th>
+						<th>사용여부</th>
+					</tr>
+				</thead>
+				<tbody id="allItemBody"></tbody>
+			</table>
 		</div>
 	</div>
 	
