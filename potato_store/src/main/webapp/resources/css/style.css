@@ -433,8 +433,16 @@ table tr:nth-child(even) {
 
 .product_wrap .in_table {
 	overflow-y: scroll;
-	max-height: 150px;
+	max-height: 230px;
 	margin-top: 20px;
+}
+
+.product_wrap .in_table tbody tr {
+	cursor: pointer;
+}
+
+.product_wrap .in_table tbody tr:hover {
+	background: #e7fffe;
 }
 
 .product_wrap .btn_wrap {

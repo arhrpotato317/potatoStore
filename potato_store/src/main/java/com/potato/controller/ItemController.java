@@ -1,5 +1,6 @@
 package com.potato.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,10 @@ public class ItemController {
 		// 상품 첫화면 - 첫번째 카테고리 리스트
 		List<Map<String, Object>> cateOneList = service.getCateOneList("C0001");
 		model.addAttribute("cateOneList", cateOneList);
+		
+		// 금일 입고리스트 조회
+		List<Map<String, Object>> todayItemList = service.getTodayItemList();
+		model.addAttribute("todayItemList", todayItemList);
 	}
 	
 	// 전체 상품 리스트 Ajax
@@ -85,6 +90,53 @@ public class ItemController {
 		cateList.put("submitCate", submitCate);
 		
 		return cateList;
+	}
+	
+	// 금일 입고리스트 Ajax
+	@RequestMapping(value = "/inItemSaveAjax", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject inItemSaveAjax(@RequestBody String ajaxRtn) throws Exception {
+		logger.info("item inItemSaveAjax");
+		
+		JSONParser jsonParser = new JSONParser();
+		JSONObject ajaxOneCode = (JSONObject)jsonParser.parse(ajaxRtn);
+		String itemCode = (String) ajaxOneCode.get("itemCode"); //상품코드
+		String itemCheck = (String) ajaxOneCode.get("itemCheck"); //추가,수정 구분코드
+		String inStock = (String) ajaxOneCode.get("inStock"); //입고수량
+		
+		JSONObject todayItemList = new JSONObject();
+		
+		if(itemCheck.length() == 0) {
+			// 입고리스트 추가 로직
+			System.out.println("입고리스트 추가 로직");
+			
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("itemCode", itemCode);
+			paramMap.put("inStock", inStock);
+			paramMap.put("updateStock", inStock);
+			
+			// 입고수량만큼 물품테이블 재고수량 증가
+			paramMap.put("upDown", "up");
+			service.stockAmtChange(paramMap);
+			
+			// 금일 입고리스트 Insert
+			service.setInItemToday(paramMap);
+			String insertItemCode = (String) paramMap.get("INSITEMLISTCD"); // insert 상품코드
+			
+			// 추가된 금일 입고리스트 행 - 바로조회 Ajax
+			Map<String, Object> getTodayItemOne = service.getTodayItemList(insertItemCode);
+			// 전체 상품 조회 수량변경 Ajax
+			Map<String, Object> itemStock = service.getItemStock(itemCode);
+			
+			todayItemList.put("getTodayItemOne", getTodayItemOne);
+			todayItemList.put("itemStock", itemStock);
+			
+		} else {
+			// 입고리스트 수정 로직
+			System.out.println("입고리스트 수정 로직");
+		}
+		
+		return todayItemList;
 	}
 }
 

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
 <head>
@@ -102,10 +103,126 @@
 							</tr>';
 					}
 					document.getElementById("cateItemBody").innerHTML = resultHtml;
+					
+					// 상품 테이블 클릭
+					var itemTable = document.getElementById("cateItemTable");
+					var itemTableTr = itemTable.getElementsByTagName("tr");
+					for(var i=0; i<itemTableTr.length; i++) {
+						itemTableTr[i].addEventListener("click", function() {
+							tableClick(this.children);
+						});
+					}
 				} else {
 					alert("실패");
 				}
 			}
+		}
+		
+		// 상품 테이블 클릭 -> 입고내용
+		function tableClick(itemTdArr) {
+			var itemCode = itemTdArr[0].innerHTML; //상품코드
+			var itemName = itemTdArr[1].innerHTML; //상품명
+			var madeCompany = itemTdArr[3].innerHTML; //제조사
+			var unitName = itemTdArr[5].innerHTML; //단위명
+			
+			document.getElementById("itemCode").value = itemCode;
+			document.getElementById("itemName").value = itemName;
+			document.getElementById("madeCompany").value = madeCompany;
+			document.getElementById("unitName").value = unitName;
+			
+			document.getElementById("itemCheck").value = "";
+			document.getElementById("inStock").value = "";
+			document.getElementById("inStock").readOnly = true;
+		}
+		
+		// 수정버튼 클릭 -> 수량입력 가능
+		function inItemEdit() {
+			document.getElementById("inStock").readOnly = false;
+		}
+		
+		// 저장버튼 클릭
+		function inItemSave() {
+			var itemCode = document.getElementById("itemCode").value; //상품코드
+			var itemCheck =  document.getElementById("itemCheck").value; //추가,수정 구분코드
+			var inStock = document.getElementById("inStock").value; //입고수량
+			var data = {
+				"itemCode": itemCode,
+				"itemCheck": itemCheck,
+				"inStock": inStock
+			}
+			
+			ajax.onreadystatechange = inItemSaveAjax;
+			ajax.open("POST", "./inItemSaveAjax", true);
+			ajax.setRequestHeader('Content-Type', 'application/json');
+			ajax.send(JSON.stringify(data));
+		}
+		function inItemSaveAjax() {
+			if(ajax.readyState === XMLHttpRequest.DONE) {
+				if(ajax.status === 200) {
+					var response = JSON.parse(ajax.responseText);
+					
+					if(response.hasOwnProperty("getTodayItemOne")) {
+						// 입고리스트 추가 로직
+						console.log("입고리스트 추가 로직");
+						var todayTable = document.getElementById("todayTable");
+						var todayTableTr = todayTable.insertRow(todayTable.rows.length);
+						todayTableTr.innerHTML = '<tr>\
+								<td>'+response.getTodayItemOne.ITEMCD+'</td>\
+								<td>'+response.getTodayItemOne.ITEMNAME+'</td>\
+								<td>'+response.getTodayItemOne.MADENMCD+'</td>\
+								<td>'+response.getTodayItemOne.MADENMNAME+'</td>\
+								<td>'+response.getTodayItemOne.ITEMUNITCD+'</td>\
+								<td>'+response.getTodayItemOne.ITEMUNITNAME+'</td>\
+								<td>'+response.getTodayItemOne.INSAMT+'</td>\
+								<td style="display:none;">'+response.getTodayItemOne.INSITEMLISTCD+'</td>\
+							</tr>';
+							
+						alert("입고상품이 추가되었습니다.");
+						
+						todayTableTr.addEventListener("click", function() {
+							todayClick(this.children);
+						});
+						
+					} else if(response.hasOwnProperty("setTodayItemOne")) {
+						// 금일 입고리스트 행 수정 로직
+						console.log("금일 입고리스트 행 수정 로직");
+					}
+					
+					// 상품 조회 리스트 수량 바로 변경 (Ajax)
+					var setItemCode = response.itemStock.ITEMCD;
+					var setItemStock = response.itemStock.STOCKAMT;
+					
+					var cateItemTable = document.getElementById("cateItemTable");
+					var cateItemTableTr = cateItemTable.getElementsByTagName("tr");
+					for(var i=0; i<cateItemTableTr.length; i++) {
+						if(cateItemTableTr[i].firstElementChild.innerText == setItemCode) {
+							cateItemTableTr[i].children[6].innerText = setItemStock;
+						}
+					}
+					
+				} else {
+					alert("실패");
+				}
+			}
+		}
+		
+		// 금일 입고 리스트 클릭 -> 입고내용
+		function todayClick(itemTdArr) {
+			var itemCode = itemTdArr[0].innerHTML; //상품코드
+			var itemName = itemTdArr[1].innerHTML; //상품명
+			var madeCompany = itemTdArr[3].innerHTML; //제조사
+			var unitName = itemTdArr[5].innerHTML; //단위명
+			var inStock = itemTdArr[6].innerHTML; //입고수량
+			var itemCheck = itemTdArr[7].innerHTML; //추가,수정 구분코드
+			
+			document.getElementById("itemCode").value = itemCode;
+			document.getElementById("itemName").value = itemName;
+			document.getElementById("madeCompany").value = madeCompany;
+			document.getElementById("unitName").value = unitName;
+			document.getElementById("inStock").value = inStock;
+			document.getElementById("itemCheck").value = itemCheck;
+			
+			document.getElementById("inStock").readOnly = true;
 		}
 	</script>
 </head>
@@ -139,7 +256,7 @@
 					</div>
 					
 					<div class="in_table">
-						<table>
+						<table id="cateItemTable">
 							<thead>
 								<tr>
 									<th>상품코드</th>
@@ -161,7 +278,7 @@
 					<h4>금일 입고 리스트</h4>
 					
 					<div class="in_table">
-						<table>
+						<table id="todayTable">
 							<thead>
 								<tr>
 									<th>상품코드</th>
@@ -173,7 +290,24 @@
 									<th>입고수량</th>
 								</tr>
 							</thead>
-							<tbody id="inItemBody"></tbody>
+							<tbody id="inItemBody">
+								<c:choose>
+									<c:when test="${fn:length(todayItemList) > 0}">
+										<c:forEach items="${todayItemList}" var="today">
+											<tr onclick="todayClick(this.children);">
+												<td>${today.ITEMCD}</td>
+												<td>${today.ITEMNAME}</td>
+												<td>${today.MADENMCD}</td>
+												<td>${today.MADENMNAME}</td>
+												<td>${today.ITEMUNITCD}</td>
+												<td>${today.ITEMUNITNAME}</td>
+												<td>${today.INSAMT}</td>
+												<td style="display:none;">${today.INSITEMLISTCD}</td>
+											</tr>
+										</c:forEach>
+									</c:when>
+								</c:choose>
+							</tbody>
 						</table>
 					</div>
 				</div>
@@ -181,29 +315,30 @@
 					<h4>입고내용</h4>
 					
 					<div class="input_box">
-						<label>상품코드</label>
-						<input type="text">
+						<label for="itemCode">상품코드</label>
+						<input type="text" id="itemCode" name="itemCode" readonly>
+						<input type="hidden" id="itemCheck" name="itemCheck">
 					</div>
 					<div class="input_box">
-						<label>상품명</label>
-						<input type="text">
+						<label for="itemName">상품명</label>
+						<input type="text" id="itemName" name="itemName" readonly>
 					</div>
 					<div class="input_box">
-						<label>제조사</label>
-						<input type="text">
+						<label for="madeCompany">제조사</label>
+						<input type="text" id="madeCompany" name="madeCompany" readonly>
 					</div>
 					<div class="input_box">
-						<label>단위명</label>
-						<input type="text">
+						<label for="unitName">단위명</label>
+						<input type="text" id="unitName" name="unitName" readonly>
 					</div>
 					<div class="input_box">
-						<label>입고수량</label>
-						<input type="text">
+						<label for="inStock">입고수량</label>
+						<input type="text" id="inStock" name="inStock" readonly>
 					</div>
 					
 					<div class="btn_wrap">
-						<button type="button" class="edit">수정</button>
-						<button type="button" class="save">저장</button>
+						<button type="button" class="edit" onclick="inItemEdit();">수정</button>
+						<button type="button" class="save" onclick="inItemSave();">저장</button>
 					</div>
 				</div>
 			</div>

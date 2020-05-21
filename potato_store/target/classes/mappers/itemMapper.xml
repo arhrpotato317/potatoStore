@@ -7,34 +7,152 @@
 	
 	<!-- 전체 상품 리스트(계층쿼리) -->
 	<select id="getAllItemList" resultType="hashmap">
-		SELECT CDLVL, CDNAME, CDNO, UPCD, DECODE(USEYN, 'Y', 'checked') USEYN
-		FROM EXAM_MANAGER.CODEMNG
-		START WITH CDNO = 'C0000'
-		CONNECT BY PRIOR CDNO = UPCD
+		<![CDATA[
+			SELECT CDLVL, CDNAME, CDNO, UPCD, DECODE(USEYN, 'Y', 'checked') USEYN
+			FROM EXAM_MANAGER.CODEMNG
+			START WITH CDNO = 'C0000'
+			CONNECT BY PRIOR CDNO = UPCD
+		]]>
 	</select>
 	
 	<!-- 카테고리 리스트 -->
 	<select id="getCateOneList" parameterType="String" resultType="hashmap">
-		SELECT CDNO, CDNAME
-		FROM EXAM_MANAGER.CODEMNG
-		WHERE UPCD = #{upCode}
+		<![CDATA[
+			SELECT CDNO, CDNAME
+			FROM EXAM_MANAGER.CODEMNG
+			WHERE UPCD = #{upCode}
+		]]>
 	</select>
 	
 	<!-- 카테고리 조회 리스트 -->
 	<select id="getCateList" parameterType="String" resultType="hashmap">
-		SELECT 
-			ITEMCD
-			, ITEMNAME
-			, MADENMCD
-			, (SELECT CDNAME FROM EXAM_MANAGER.CODEMNG CMG WHERE ITEM.MADENMCD = CMG.CDNO) AS MADENMNAME
-			, ITEMUNITCD
-			, (SELECT CDNAME FROM EXAM_MANAGER.CODEMNG CMG WHERE ITEM.ITEMUNITCD = CMG.CDNO) AS ITEMUNITNAME
-			, STOCKAMT
-			, DECODE(STOCKYN, 'Y', 'checked') STOCKYN
-			, DECODE(USEYN, 'Y', 'checked') USEYN
-			, ITEMCLSCD
-		FROM EXAM_MANAGER.ITEMLIST ITEM
-		WHERE ITEMCLSCD = #{cateTwo}
+		<![CDATA[
+			SELECT 
+				ITEMCD
+				, ITEMNAME
+				, MADENMCD
+				, (SELECT CDNAME FROM EXAM_MANAGER.CODEMNG CMG WHERE ITEM.MADENMCD = CMG.CDNO) AS MADENMNAME
+				, ITEMUNITCD
+				, (SELECT CDNAME FROM EXAM_MANAGER.CODEMNG CMG WHERE ITEM.ITEMUNITCD = CMG.CDNO) AS ITEMUNITNAME
+				, STOCKAMT
+				, DECODE(STOCKYN, 'Y', 'checked') STOCKYN
+				, DECODE(USEYN, 'Y', 'checked') USEYN
+				, ITEMCLSCD
+			FROM EXAM_MANAGER.ITEMLIST ITEM
+			WHERE ITEMCLSCD = #{cateTwo}
+		]]>
+	</select>
+	
+	<!-- 금일 입고리스트에 데이터 저장 -->
+	<insert id="setInItemToday" parameterType="hashmap">
+		<selectKey keyProperty="INSITEMLISTCD" resultType="String" order="BEFORE">
+			SELECT 'II' || NVL(LPAD(SUBSTR(MAX(INSITEMLISTCD), 3)+1, 8, '0'), 1) FROM EXAM_MANAGER.INITEMLIST
+		</selectKey>
+		
+		<![CDATA[
+			INSERT INTO EXAM_MANAGER.INITEMLIST
+			(ITEMCD, INSITEMLISTCD, INSAMT, INSDATE, INSUSER)
+			VALUES(#{itemCode}
+				, (SELECT 'II' || NVL(LPAD(SUBSTR(MAX(INSITEMLISTCD), 3)+1, 8, '0'), 1) FROM EXAM_MANAGER.INITEMLIST)
+				, #{inStock}
+				, SYSDATE
+				, '관리자')
+		]]>
+	</insert>
+	
+	<!-- 상품 입고 시 물품관리테이블 재고수량 변경 -->
+	<update id="stockAmtChange" parameterType="hashmap">
+		UPDATE EXAM_MANAGER.ITEMLIST
+		SET 
+		<if test="upDown != null and upDown =='down'">
+			STOCKAMT = STOCKAMT - #{updateStock}
+		</if>
+		<if test="upDown != null and upDown =='up'">
+			STOCKAMT = STOCKAMT + #{updateStock}
+		</if>
+		
+		WHERE ITEMCD = #{itemCode}
+	</update>
+	
+	<!-- 금일 입고리스트 조회 -->
+	<select id="getTodayItemList" parameterType="String" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+				ITEMCD
+				, INSITEMLISTCD
+				,(SELECT ITEMNAME FROM EXAM_MANAGER.ITEMLIST ITEM WHERE INITEM.ITEMCD = ITEM.ITEMCD) AS ITEMNAME
+				,(SELECT MADENMCD FROM EXAM_MANAGER.ITEMLIST ITEM WHERE INITEM.ITEMCD = ITEM.ITEMCD) AS MADENMCD
+				,(SELECT CMG.CDNAME
+					FROM EXAM_MANAGER.ITEMLIST ITEM, EXAM_MANAGER.CODEMNG CMG
+					WHERE INITEM.ITEMCD = ITEM.ITEMCD
+					AND ITEM.MADENMCD = CMG.CDNO) AS MADENMNAME
+				,(SELECT ITEMUNITCD FROM EXAM_MANAGER.ITEMLIST ITEM WHERE INITEM.ITEMCD = ITEM.ITEMCD) AS ITEMUNITCD
+				,(SELECT CMG.CDNAME
+					FROM EXAM_MANAGER.ITEMLIST ITEM, EXAM_MANAGER.CODEMNG CMG
+					WHERE INITEM.ITEMCD = ITEM.ITEMCD
+					AND ITEM.ITEMUNITCD = CMG.CDNO) AS ITEMUNITNAME
+				, INSAMT
+			FROM EXAM_MANAGER.INITEMLIST INITEM
+			WHERE INSDATE = TO_CHAR(SYSDATE, 'YY/MM/DD')
+		]]>
+		
+		<if test="value != null">
+			AND INITEM.INSITEMLISTCD = #{value}
+		</if>
+	</select>
+	
+	<!-- 물품테이블 수량 조회 -->
+	<select id="getItemStock" parameterType="String" resultType="hashmap">
+		<![CDATA[
+			SELECT ITEMCD, STOCKAMT FROM EXAM_MANAGER.ITEMLIST
+			WHERE ITEMCD = #{itemCode}
+		]]>
 	</select>
 	
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
