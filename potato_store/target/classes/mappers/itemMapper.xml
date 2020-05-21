@@ -101,6 +101,13 @@
 		</if>
 	</select>
 	
+	<!-- 금일 입고리스트 수량 변경 -->
+	<update id="setTodayItemStock" parameterType="hashmap">
+		UPDATE EXAM_MANAGER.INITEMLIST
+		SET INSAMT = #{inStock}
+		WHERE INSITEMLISTCD = #{itemCheck}
+	</update>
+	
 	<!-- 물품테이블 수량 조회 -->
 	<select id="getItemStock" parameterType="String" resultType="hashmap">
 		<![CDATA[

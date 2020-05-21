@@ -132,6 +132,7 @@
 			
 			document.getElementById("itemCheck").value = "";
 			document.getElementById("inStock").value = "";
+			document.getElementById("oldStock").value = "";
 			document.getElementById("inStock").readOnly = true;
 		}
 		
@@ -143,12 +144,28 @@
 		// 저장버튼 클릭
 		function inItemSave() {
 			var itemCode = document.getElementById("itemCode").value; //상품코드
+			var itemName = document.getElementById("itemName").value; //상품명
+			var madeCompany = document.getElementById("madeCompany").value; //제조사
+			var unitName = document.getElementById("unitName").value; //단위명
+			
+			var oldStock = document.getElementById("oldStock").value; //수량 up,down 구분
 			var itemCheck =  document.getElementById("itemCheck").value; //추가,수정 구분코드
 			var inStock = document.getElementById("inStock").value; //입고수량
+			
+			if(itemCode == '' || itemName == '' || madeCompany == '' || unitName == '') {
+				alert("상품을 클릭하여 입력해주세요.");
+				return false;
+			}
+			if(inStock == '') {
+				alert("수정버튼을 눌러 수량을 입력해주세요.");
+				return false;
+			}
+			
 			var data = {
 				"itemCode": itemCode,
 				"itemCheck": itemCheck,
-				"inStock": inStock
+				"inStock": inStock,
+				"oldStock": oldStock
 			}
 			
 			ajax.onreadystatechange = inItemSaveAjax;
@@ -163,7 +180,6 @@
 					
 					if(response.hasOwnProperty("getTodayItemOne")) {
 						// 입고리스트 추가 로직
-						console.log("입고리스트 추가 로직");
 						var todayTable = document.getElementById("todayTable");
 						var todayTableTr = todayTable.insertRow(todayTable.rows.length);
 						todayTableTr.innerHTML = '<tr>\
@@ -179,13 +195,32 @@
 							
 						alert("입고상품이 추가되었습니다.");
 						
+						document.getElementById("itemCode").value = "";
+						document.getElementById("itemName").value = "";
+						document.getElementById("madeCompany").value = "";
+						document.getElementById("unitName").value = "";
+						document.getElementById("inStock").value = "";
+						
 						todayTableTr.addEventListener("click", function() {
 							todayClick(this.children);
 						});
 						
 					} else if(response.hasOwnProperty("setTodayItemOne")) {
 						// 금일 입고리스트 행 수정 로직
-						console.log("금일 입고리스트 행 수정 로직");
+						var inStock = response.setTodayItemOne.inStock;
+						var itemCheck = response.setTodayItemOne.itemCheck;
+						
+						document.getElementById("oldStock").value = inStock;
+						var todayTable = document.getElementById("todayTable");
+						var todayTableTr = todayTable.getElementsByTagName("tr");
+						for(var i=0; i<todayTableTr.length; i++) {
+							if(todayTableTr[i].lastElementChild.innerText == itemCheck) {
+								todayTableTr[i].children[6].innerText = inStock;
+							}
+						}
+						
+						alert("입고상품이 수정되었습니다.");
+						document.getElementById("inStock").readOnly = true;
 					}
 					
 					// 상품 조회 리스트 수량 바로 변경 (Ajax)
@@ -220,6 +255,7 @@
 			document.getElementById("madeCompany").value = madeCompany;
 			document.getElementById("unitName").value = unitName;
 			document.getElementById("inStock").value = inStock;
+			document.getElementById("oldStock").value = inStock;
 			document.getElementById("itemCheck").value = itemCheck;
 			
 			document.getElementById("inStock").readOnly = true;
@@ -334,6 +370,7 @@
 					<div class="input_box">
 						<label for="inStock">입고수량</label>
 						<input type="text" id="inStock" name="inStock" readonly>
+						<input type="hidden" id="oldStock" name="oldStock">
 					</div>
 					
 					<div class="btn_wrap">

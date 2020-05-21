@@ -54,6 +54,12 @@ public class ItemDAOImpl implements ItemDAO {
 	public Map<String, Object> getTodayItemList(String insertItemCode) throws Exception {
 		return sql.selectOne("item.getTodayItemList", insertItemCode);
 	}
+	
+	// 금일 입고리스트 수량 변경
+	@Override
+	public void setTodayItemStock(Map<String, Object> map) throws Exception {
+		sql.update("item.setTodayItemStock", map);
+	}
 
 	// 물품테이블 수량 조회
 	@Override

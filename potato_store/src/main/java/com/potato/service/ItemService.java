@@ -26,6 +26,9 @@ public interface ItemService {
 	// 추가된 금일 입고리스트 행 - 바로조회
 	public Map<String, Object> getTodayItemList(String insertItemCode) throws Exception;
 	
+	// 금일 입고리스트 수량 변경
+	public void setTodayItemStock(Map<String, Object> map) throws Exception;
+	
 	// 물품테이블 수량 조회
 	public Map<String, Object> getItemStock(String itemCode) throws Exception;
 }

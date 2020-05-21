@@ -92,7 +92,7 @@ public class ItemController {
 		return cateList;
 	}
 	
-	// 금일 입고리스트 Ajax
+	// 금일 입고리스트 Ajax (저장버튼)
 	@RequestMapping(value = "/inItemSaveAjax", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject inItemSaveAjax(@RequestBody String ajaxRtn) throws Exception {
@@ -102,14 +102,12 @@ public class ItemController {
 		JSONObject ajaxOneCode = (JSONObject)jsonParser.parse(ajaxRtn);
 		String itemCode = (String) ajaxOneCode.get("itemCode"); //상품코드
 		String itemCheck = (String) ajaxOneCode.get("itemCheck"); //추가,수정 구분코드
-		String inStock = (String) ajaxOneCode.get("inStock"); //입고수량
+		int inStock = Integer.parseInt((String) ajaxOneCode.get("inStock")); //변경 입고수량
 		
 		JSONObject todayItemList = new JSONObject();
 		
 		if(itemCheck.length() == 0) {
 			// 입고리스트 추가 로직
-			System.out.println("입고리스트 추가 로직");
-			
 			Map<String, Object> paramMap = new HashMap<String, Object>();
 			paramMap.put("itemCode", itemCode);
 			paramMap.put("inStock", inStock);
@@ -133,7 +131,35 @@ public class ItemController {
 			
 		} else {
 			// 입고리스트 수정 로직
-			System.out.println("입고리스트 수정 로직");
+			int oldStock = Integer.parseInt((String) ajaxOneCode.get("oldStock")); //변경 전 입고수량
+			
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("itemCode", itemCode);
+			paramMap.put("itemCheck", itemCheck);
+			paramMap.put("inStock", inStock);
+			
+			// 입고수량 변경만큼 물품테이블 재고수량 변경
+			if(oldStock > inStock) {
+				// 수정한 수량이 더 적다면 차액을 -
+				int updateStock = oldStock - inStock;
+				paramMap.put("updateStock", updateStock);
+				paramMap.put("upDown", "down");
+			} else {
+				// 수정한 수량이 더 적다면 차액을 +
+				int updateStock = inStock - oldStock;
+				paramMap.put("updateStock", updateStock);
+				paramMap.put("upDown", "up");
+			}
+			service.stockAmtChange(paramMap);
+			
+			// 금일 입고리스트 update
+			service.setTodayItemStock(paramMap);
+			
+			// 전체 상품 조회 수량변경 Ajax
+			Map<String, Object> itemStock = service.getItemStock(itemCode);
+			
+			todayItemList.put("setTodayItemOne", paramMap);
+			todayItemList.put("itemStock", itemStock);
 		}
 		
 		return todayItemList;
