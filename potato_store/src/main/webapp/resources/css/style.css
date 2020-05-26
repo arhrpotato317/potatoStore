@@ -411,8 +411,13 @@ table tr:nth-child(even) {
 	display: inline-block;
 }
 
-.product_wrap .input_box input {
+.product_wrap .input_box input,
+.product_wrap .input_box select {
 	width: calc(50% - 80px);
+}
+
+.product_wrap .input_box input[type='checkbox'] {
+	width: auto;
 }
 
 .product_wrap .input_wrap .input_box {

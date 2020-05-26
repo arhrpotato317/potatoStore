@@ -121,7 +121,7 @@
 				<h2>상품 관리</h2>
 				<div class="btn_wrap">
 					<button type="button" onclick="location.href='./item/initem'">상품 입고</button>
-					<button type="button">상품 출고</button>
+					<button type="button" onclick="location.href='./item/outitem'">상품 출고</button>
 				</div>
 			</div>
 		</div>
