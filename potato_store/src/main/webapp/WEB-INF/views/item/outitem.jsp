@@ -372,6 +372,14 @@
 			document.getElementById("delivYn").checked = delivYn; //검수여부
 			document.getElementById("readyDelivYn").checked = delivYn; //검수여부
 			document.getElementById("addrCompany").value = delivCompany; //배송회사
+			
+			// 입력 가능 세팅
+			document.getElementById("outUserId").readOnly = true;
+			document.getElementById("userName").readOnly = true;
+			document.getElementById("invoiceNum").readOnly = true;
+			document.getElementById("outStock").readOnly = true;
+			document.getElementById("checkYn").disabled = true;
+			document.getElementById("delivYn").disabled = true;
 		}
 	</script>
 </head>
