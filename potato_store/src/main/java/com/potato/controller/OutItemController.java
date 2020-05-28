@@ -123,6 +123,49 @@ public class OutItemController {
 			
 		} else {
 			// 출고리스트 수정 로직
+			
+			int oldStock = Integer.parseInt((String) ajaxOneCode.get("oldStock")); //기존 출고수량
+			
+			if(readyDelivYn.equals("N") && delivYn.equals("Y")) {
+				// 배송여부 체크X -> 체크O
+				
+				// 출고수량만큼 물품테이블 재고수량 변경
+				paramMap.put("updateStock", outStock);
+				paramMap.put("upDown", "down");
+				inService.stockAmtChange(paramMap);
+				
+			} else if(readyDelivYn.equals("Y") && delivYn.equals("N")) {
+				// 배송여부 체크O -> 체크X
+				
+				// 출고수량만큼 물품테이블 재고수량 변경
+				paramMap.put("updateStock", outStock);
+				paramMap.put("upDown", "up");
+				inService.stockAmtChange(paramMap);
+				
+			} else if(readyDelivYn.equals("Y") && delivYn.equals("Y")) {
+				// 배송체크 -> 수량변경
+				
+				if(oldStock > outStock) {
+					int updateStock = oldStock - outStock;
+					paramMap.put("updateStock", updateStock);
+					paramMap.put("upDown", "up");
+				} else {
+					int updateStock = outStock - oldStock;
+					paramMap.put("updateStock", updateStock);
+					paramMap.put("upDown", "down");
+				}
+				
+				// 출고수량만큼 물품테이블 재고수량 변경
+				inService.stockAmtChange(paramMap);
+			}
+			
+			// 출고관리 테이블 정보 수정
+			paramMap.put("outItemListCode", itemCheck);
+			outService.outItemUpdate(paramMap);
+			
+			// 수정된 금일 출고리스트 행 - 바로조회 Ajax
+			Map<String, Object> setTodayOutItemOne = outService.todayOutItem(itemCheck);
+			todayOutItemList.put("setTodayOutItemOne", setTodayOutItemOne);
 		}
 		
 		// 상품 조회 리스트 수량 최종 결과

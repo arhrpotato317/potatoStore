@@ -20,7 +20,7 @@ body::after {
 	display: block;
 	width: 370px;
 	height: 370px;
-	background: url('../images/image01.png') no-repeat;
+	/* background: url('../images/image01.png') no-repeat; */
 	background-size: 100%;
 	position: fixed;
 	right: 0;

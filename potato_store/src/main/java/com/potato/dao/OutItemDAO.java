@@ -17,4 +17,7 @@ public interface OutItemDAO {
 	// 상품 조회 리스트 수량 최종 결과
 	public Map<String, Object> resultAmt(String itemCode) throws Exception;
 	
+	// 출고 테이블 정보 수정
+	public void outItemUpdate(Map<String, Object> map) throws Exception;
+	
 }

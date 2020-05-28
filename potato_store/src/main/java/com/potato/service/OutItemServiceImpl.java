@@ -38,4 +38,10 @@ public class OutItemServiceImpl implements OutItemService {
 		return dao.resultAmt(itemCode);
 	}
 
+	// 출고 테이블 정보 수정
+	@Override
+	public void outItemUpdate(Map<String, Object> map) throws Exception {
+		dao.outItemUpdate(map);
+	}
+
 }

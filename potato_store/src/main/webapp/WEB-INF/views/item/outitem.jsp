@@ -133,17 +133,24 @@
 			document.getElementById("unitName").value = unitName;
 			
 			// 빈칸 세팅
+			document.getElementById("itemCheck").value = "";
 			document.getElementById("outUserId").value = ""; //회원아이디
 			document.getElementById("userName").value = ""; //회원이름
 			document.getElementById("invoiceNum").value = ""; //송장번호
 			document.getElementById("outStock").value = ""; //변경 출고수량
 			document.getElementById("oldStock").value = ""; //기존 출고수량
-			
 			document.getElementById("checkYn").checked = false; //검수여부
 			document.getElementById("delivYn").checked = false; //변경 배송여부
 			document.getElementById("readyDelivYn").checked = false; //기존 배송여부
-			
 			document.getElementById("addrCompany").selectedIndex = "0"; //배송회사
+			
+			// 입력 가능 세팅
+			document.getElementById("outUserId").readOnly = true;
+			document.getElementById("userName").readOnly = true;
+			document.getElementById("invoiceNum").readOnly = true;
+			document.getElementById("outStock").readOnly = true;
+			document.getElementById("checkYn").disabled = true;
+			document.getElementById("delivYn").disabled = true;
 		}
 		
 		// 수정버튼 클릭 -> 입력 가능
@@ -152,7 +159,6 @@
 			document.getElementById("userName").readOnly = false;
 			document.getElementById("invoiceNum").readOnly = false;
 			document.getElementById("outStock").readOnly = false;
-			
 			document.getElementById("checkYn").disabled = false;
 			document.getElementById("delivYn").disabled = false;
 		}
@@ -174,6 +180,16 @@
 			var delivYn = document.getElementById("delivYn").checked; //변경 배송여부
 			var readyDelivYn = document.getElementById("readyDelivYn").checked; //기존 배송여부
 			var addrCompany = document.getElementById("addrCompany").value; //배송회사
+			
+			if(itemCode == '' || itemName == '' || madeCompany == '' || unitName == '') {
+				alert("상품 조회 리스트에서 상품을 선택해주세요.");
+				return false;
+			}
+			
+			if(outUserId == '' || userName == '' || invoiceNum == '' || outStock == '' || addrCompany.selectedIndex == '0') {
+				alert("수정 버튼을 눌러 입력을 완성해주세요.");
+				return false;
+			}
 			
 			var data = {
 				"itemCode": itemCode,
@@ -215,7 +231,7 @@
 							delivYn = "checked";
 						}
 						
-						var todayTable = document.getElementById("todayTable");
+						var todayTable = document.getElementById("inItemBody");
 						var todayTableTr = todayTable.insertRow(todayTable.rows.length);
 						todayTableTr.innerHTML = '<tr>\
 							<td>'+response.getTodayOutItemOne.ITEMCD+'</td>\
@@ -246,12 +262,18 @@
 						document.getElementById("invoiceNum").value = ""; //송장번호
 						document.getElementById("outStock").value = ""; //변경 출고수량
 						document.getElementById("oldStock").value = ""; //기존 출고수량
-						
 						document.getElementById("checkYn").checked = false; //검수여부
 						document.getElementById("delivYn").checked = false; //변경 배송여부
 						document.getElementById("readyDelivYn").checked = false; //기존 배송여부
-						
 						document.getElementById("addrCompany").selectedIndex = "0"; //배송회사
+						
+						// 입력 가능 세팅
+						document.getElementById("outUserId").readOnly = true;
+						document.getElementById("userName").readOnly = true;
+						document.getElementById("invoiceNum").readOnly = true;
+						document.getElementById("outStock").readOnly = true;
+						document.getElementById("checkYn").disabled = true;
+						document.getElementById("delivYn").disabled = true;
 						
 						todayTableTr.addEventListener("click", function() {
 							todayClick(this.children);
@@ -259,6 +281,53 @@
 						
 					} else if(response.hasOwnProperty("setTodayOutItemOne")) {
 						// 출고리스트 수정 로직
+						var itemTable = document.getElementById("inItemBody");
+						var itemTableTr = itemTable.rows;
+						
+						for(var i=0; i<itemTableTr.length; i++) {
+							if(itemTableTr[i].children[17].firstChild.value == response.setTodayOutItemOne.OUTITEMLISTCD) {
+								itemTableTr[i].children[15].firstChild.value = response.setTodayOutItemOne.DELIVNO; // 송장번호 즉시 변경
+								itemTableTr[i].children[5].innerText = response.setTodayOutItemOne.DELIVAMT; // 출고수량 즉시 변경
+								
+								// 검수여부 즉시 변경
+								if(response.setTodayOutItemOne.CHECKYN == 'Y') {
+									itemTableTr[i].children[13].firstChild.checked = true;
+								} else {
+									itemTableTr[i].children[13].firstChild.checked = false;
+								}
+								
+								// 배송여부 즉시 변경
+								if(response.setTodayOutItemOne.DELIVYN == 'Y') {
+									itemTableTr[i].children[14].firstChild.checked = true;
+								} else {
+									itemTableTr[i].children[14].firstChild.checked = false;
+								}
+								
+								itemTableTr[i].children[16].firstChild.value = response.setTodayOutItemOne.DELIVCORPCD; // 배송회사 즉시 변경
+							}
+						}
+						
+						alert("출고상품이 수정되었습니다.");
+						
+						// 빈칸 세팅
+						document.getElementById("itemCheck").value = "";
+						document.getElementById("outUserId").value = ""; //회원아이디
+						document.getElementById("userName").value = ""; //회원이름
+						document.getElementById("invoiceNum").value = ""; //송장번호
+						document.getElementById("outStock").value = ""; //변경 출고수량
+						document.getElementById("oldStock").value = ""; //기존 출고수량
+						document.getElementById("checkYn").checked = false; //검수여부
+						document.getElementById("delivYn").checked = false; //변경 배송여부
+						document.getElementById("readyDelivYn").checked = false; //기존 배송여부
+						document.getElementById("addrCompany").selectedIndex = "0"; //배송회사
+						
+						// 입력 가능 세팅
+						document.getElementById("outUserId").readOnly = true;
+						document.getElementById("userName").readOnly = true;
+						document.getElementById("invoiceNum").readOnly = true;
+						document.getElementById("outStock").readOnly = true;
+						document.getElementById("checkYn").disabled = true;
+						document.getElementById("delivYn").disabled = true;
 					}
 					
 					// 상품 조회 리스트 수량 최종 결과

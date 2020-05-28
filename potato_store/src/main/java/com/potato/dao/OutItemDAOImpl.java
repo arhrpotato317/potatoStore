@@ -36,5 +36,11 @@ public class OutItemDAOImpl implements OutItemDAO {
 	public Map<String, Object> resultAmt(String itemCode) throws Exception {
 		return sql.selectOne("outitem.resultAmt", itemCode);
 	}
+	
+	// 출고 테이블 정보 수정
+	@Override
+	public void outItemUpdate(Map<String, Object> map) throws Exception {
+		sql.update("outitem.outItemUpdate", map);
+	}
 
 }

@@ -56,6 +56,18 @@
 		WHERE ITEMCD = #{itemCode}
 	</select>
 	
+	<!-- 출고 테이블 정보 수정 -->
+	<update id="outItemUpdate" parameterType="hashmap">
+		UPDATE EXAM_MANAGER.OUTITEMLIST
+		SET
+			DELIVNO = #{delivNo},
+			DELIVAMT = #{delivAmt},
+			CHECKYN = #{checkYn},
+			DELIVYN = #{delivYn},
+			DELIVCORPCD = #{delivcorpCd}
+		WHERE OUTITEMLISTCD = #{outItemListCode}
+	</update>
+	
 </mapper>
 
 
